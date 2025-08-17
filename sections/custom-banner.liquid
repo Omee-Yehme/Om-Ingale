@@ -33,7 +33,7 @@
         <img src="{{ section.settings.banner_image | img_url: '2048x2048' }}" alt="Banner Image" class="banner-img"/>
         {% endif %}
         <div class="banner-content">
-            <h1>{{section.settings.banner_heading}}</h1>
+            <h1 class="banner-heading">{{section.settings.banner_heading}}</h1>
             <p>{{ section.settings.banner_subheading }}</p>
         </div>
     </div>
@@ -44,6 +44,11 @@
         position: relative;
         text-align: center;
         color: white;
+    }
+    .banner-heading{
+        position: absolute;
+        bottom: 0;
+        left: 0;
     }
 
     .coustom-banner .banner-img{
