@@ -1,0 +1,74 @@
+{%  schema  %} 
+{
+    "name": "Custom banner",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "banner_image",   
+            "label": "Banner Image",
+        },
+        {
+            "type": "text",
+            "id": "banner_heading",
+            "label": "Heading",
+            "default": "Welcome to Our Store"
+        },
+        {
+            "type":"text",
+            "id": "banner_subheading",
+            "label": "Subheading",
+            "default": "Discover our latest products and offers" 
+        }
+    ],
+    "presets": [
+        {
+            "name": "Custom Banner",
+            "category": "Custom"
+        }
+    ]
+} {% endschema %}
+<section class="custom-banner">
+    <div class="banner-wrapper">
+        {% if section.settings.banner_image %}
+        <img src="{{ section.settings.banner_image | img_url: '2048x2048' }}" alt="Banner Image" class="banner-img"/>
+        {% endif %}
+        <div class="banner-content">
+            <h1>{{section.settings.banner_heading}}</h1>
+            <p>{{ section.settings.banner_subheading }}</p>
+        </div>
+    </div>
+</section>
+
+<style>
+    .coustom-banner {
+        position: relative;
+        text-align: center;
+        color: white;
+    }
+
+    .coustom-banner .banner-img{
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .coustom-banner .banner-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+    .coustom-banner h1 {
+        font-size: 2.5em;
+        margin: 0;
+    }
+
+    .coustom-banner p {
+        font-size: 1.2rem;
+    }
+</style>
+
+
+
+
