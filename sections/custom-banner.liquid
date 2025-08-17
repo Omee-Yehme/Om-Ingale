@@ -1,79 +1,269 @@
-{%  schema  %} 
-{
+    {% schema %} 
+    {
     "name": "Custom banner",
     "settings": [
-        {
-            "type": "image_picker",
-            "id": "banner_image",   
-            "label": "Banner Image",
-        },
-        {
-            "type": "text",
-            "id": "banner_heading",
-            "label": "Heading",
-            "default": "Welcome to Our Store"
-        },
-        {
-            "type":"text",
-            "id": "banner_subheading",
-            "label": "Subheading",
-            "default": "Discover our latest products and offers" 
-        }
+    {
+        "type": "image_picker",
+        "id": "banner_image",   
+        "label": "Banner Image"
+    },
+    {
+        "type": "text",
+        "id": "banner_heading",
+        "label": "Heading",
+        "default": "The Gift Guide"
+    },
+    {
+        "type":"text",
+        "id": "banner_subheading",
+        "label": "Subheading",
+        "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season." 
+    },
+    {
+        "type": "text",
+        "id": "banner_logo",
+        "label": "Banner Logo",
+        "default":"TISSO VISION"
+    },
+    {
+        "type": "text",
+        "id": "header_text",
+        "label": "Header Text",
+        "default":"Find the ideal gift for your loved ones."
+    },
+    
+    {
+        "type": "text",
+        "id": "button_label",
+        "label": "Primary Button Label",
+        "default":"Shop Now"
+    },
+    {
+        "type":"url",
+        "id": "button_link",
+        "label": "Primary Button Link"
+    },{
+        "type": "text",
+        "id": "button2_label",
+        "label": "Secondary Button Label",
+        "default":"Choose Gift"
+    },{
+        "type": "url",
+        "id": "button2_link",
+        "label": "Secondary Button Link"
+    },
+    {
+        "type": "text",
+        "id": "banner_footer",
+        "label": "Banner Footer",
+        "default":"SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+    }
     ],
     "presets": [
-        {
-            "name": "Custom Banner",
-            "category": "Custom"
-        }
+    {
+        "name": "Custom Banner",
+        "category": "Custom"
+    }
     ]
-} {% endschema %}
-<section class="custom-banner">
-    <div class="banner-wrapper">
-        {% if section.settings.banner_image %}
-        <img src="{{ section.settings.banner_image | img_url: '2048x2048' }}" alt="Banner Image" class="banner-img"/>
-        {% endif %}
+    }
+    {% endschema %}
+
+<section class="custom-banner-wrapper">
+    <!-- HEADER BAR -->
+    <div class="head">
+        <h3 class="banner-logo">{{ section.settings.banner_logo | upcase }}</h3>
+        <p class="header-text">{{ section.settings.header_text }}</p>
+        {% if section.settings.button2_label != blank %}
+            <a href="{{ section.settings.button2_link }}" class="header-button">
+                {{ section.settings.button2_label }} &rarr;
+            </a>
+            {% endif %}
+    </div>    
+
+    <!-- BANNER IMAGE SECTION -->
+    <div class="custom-banner" style="background-image: url({{ section.settings.banner_image | img_url: '1440x780' }});">
         <div class="banner-content">
-            <h1 class="banner-heading">{{section.settings.banner_heading}}</h1>
-            <p>{{ section.settings.banner_subheading }}</p>
+        <h1>{{ section.settings.banner_heading }}</h1>
+        <p>{{ section.settings.banner_subheading }}</p>
+        {% if section.settings.button_label != blank %}
+            <a href="{{ section.settings.button_link }}" class="banner-button">
+            {{ section.settings.button_label }} &rarr;
+            </a>
+        {% endif %}
         </div>
     </div>
-</section>
 
-<style>
-    .coustom-banner {
-        position: relative;
-        text-align: center;
-        color: white;
+    <!-- FOOTER SECTION -->
+    <div class="footer">
+        <h5>{{ section.settings.banner_footer }}</h5>
+    </div>
+    </section>
+
+    
+
+    <style>
+    body{
+        overflow-x: hidden;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    .banner-heading{
+
+    .head{
+        background-color: #F5F5F5;
+        height: 64px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 50px 10px 50px;
+    }
+    .banner-logo{
+            font-size: 19px;
+            font-weight: bold;
+            vertical-align: middle;
+            padding-top: 22.5px;
+            padding-left: 50.78px;
+    }
+    .header-text{
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 13.42px;
+        letter-spacing: 0;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .header-button{
+        position: relative;
+        padding: 11.67px 41px;
+        width: 207px;
+        height: 44px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 20.48px;
+        letter-spacing: 0;
+        vertical-align: middle;
+        text-align: center;
+        text-transform: uppercase;
+        background-color: #FFF544;
+        color: #000000;
+        overflow: hidden;
+        transition: color 0.3 ease;
+        z-index: 1;
+    }
+    .header-button::before{
+        content: "";
         position: absolute;
-        bottom: 0;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        z-index: -1;
+        transition: left 0.3s ease;
+    }
+    .header-button:hover::before{
         left: 0;
     }
-
-    .coustom-banner .banner-img{
-        width: 100%;
-        height: auto;
-        display: block;
+    .header-button:hover{
+        color: white;
     }
 
-    .coustom-banner .banner-content {
+    .custom-banner {
+    position: relative;
+    text-align: left;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 780px;
+    color: #000;
+
+    }
+    .banner-content{
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-    }
-    .coustom-banner h1 {
-        font-size: 2.5em;
+        left: 67px;
+        color: #000000;
         margin: 0;
+        padding: 0;
+        top: -64px;
+        /* margin: 30px; */
+    }
+    
+    .banner-content h1{
+    position: absolute;
+    top: 489px;
+    width: 459px;
+    height: 70px;
+    font-weight: 500;
+    font-size: 70px;
+    line-height: 100%;
+    letter-spacing: 0;
+    vertical-align: middle;
+    padding: 0;
+    margin: 0;
+    } 
+
+    .banner-content p {
+    position: absolute;
+    top: 609px;
+    padding-top: 0;
+    margin-top: 0;
+    height: 84px;
+    width: 483px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 140%;
+    letter-spacing: 0;
+    vertical-align: middle;
+    }
+    .footer h5{
+        display: inline-block;
+        background-color: #F5F5F5;
+        height: 34px;
+        width: 100%;
+        font-size: 16px;
+        line-height: 13.42px;
+        letter-spacing: 0;
+        vertical-align: middle;
+        text-align: center;
+        gap: 375px;
+        padding: 10px 50px 10px 50px;
     }
 
-    .coustom-banner p {
-        font-size: 1.2rem;
+    .banner-button {
+    width: 220px;
+    height: 50px;
+    position: absolute;
+    top: 743px;
+    display: inline-block;
+    padding: 12px 24px;
+    background: #000;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color ease 0.3s;
+    text-align: center;
+    overflow: hidden;
+    text-transform: uppercase;
+    z-index: 1;
     }
-</style>
+    .banner-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    transition: left 0.3s ease;
+    background-color: #FFF544;
+    z-index: -1;
+}
+.banner-button:hover::before{
+    left: 0;
+}
 
-
-
-
+    .banner-button:hover {
+    color: #000;
+    }
+    </style>
