@@ -1,170 +1,178 @@
-    {% schema %} 
+    {% schema %}
     {
     "name": "Custom banner",
     "settings": [
-    {
+        {
+        "type": "text",
+        "id": "banner_logo",
+        "label": "Header Logo",
+        "default": "TISSO VISION"
+        },
+        {
+        "type": "text",
+        "id": "header_text",
+        "label": "Header Text",
+        "default": "Find the ideal gift for your loved ones."
+        },
+        {
+        "type": "text",
+        "id": "button_label",
+        "label": "Header Button Label",
+        "default": "Shop Now"
+        }, 
+        {
+        "type": "url",
+        "id": "button_link",
+        "label": "Header Button Link"
+        },  
+        {
         "type": "image_picker",
-        "id": "banner_image",   
+        "id": "banner_image",
         "label": "Banner Image"
-    },
-    {
+        },
+        {
         "type": "text",
         "id": "banner_heading",
         "label": "Heading",
         "default": "The Gift Guide"
-    },
-    {
-        "type":"text",
+        },
+        {
+        "type": "text",
         "id": "banner_subheading",
         "label": "Subheading",
-        "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season." 
-    },
-    {
-        "type": "text",
-        "id": "banner_logo",
-        "label": "Banner Logo",
-        "default":"TISSO VISION"
-    },
-    {
-        "type": "text",
-        "id": "header_text",
-        "label": "Header Text",
-        "default":"Find the ideal gift for your loved ones."
-    },
-    
-    {
-        "type": "text",
-        "id": "button_label",
-        "label": "Primary Button Label",
-        "default":"Shop Now"
-    },
-    {
-        "type":"url",
-        "id": "button_link",
-        "label": "Primary Button Link"
-    },{
+        "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season."
+        },
+        {
         "type": "text",
         "id": "button2_label",
-        "label": "Secondary Button Label",
-        "default":"Choose Gift"
-    },{
+        "label": "Banner Button Label",
+        "default": "Choose Gift"
+        }, {
         "type": "url",
         "id": "button2_link",
-        "label": "Secondary Button Link"
-    },
-    {
+        "label": "Banner Button Link"
+        }, 
+        {
         "type": "text",
         "id": "banner_footer",
         "label": "Banner Footer",
-        "default":"SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
-    }
+        "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+        }
     ],
     "presets": [
-    {
+        {
         "name": "Custom Banner",
         "category": "Custom"
-    }
+        }
     ]
     }
     {% endschema %}
 
-<section class="custom-banner-wrapper">
+    <section class="custom-banner-wrapper">
     <!-- HEADER BAR -->
     <div class="head">
-        <h3 class="banner-logo">{{ section.settings.banner_logo | upcase }}</h3>
-        <p class="header-text">{{ section.settings.header_text }}</p>
-        {% if section.settings.button2_label != blank %}
-            <a href="{{ section.settings.button2_link }}" class="header-button">
-                {{ section.settings.button2_label }} &rarr;
-            </a>
-            {% endif %}
-    </div>    
+    <h3 class="banner-logo">{{ section.settings.banner_logo | upcase }}</h3>
+    <p class="header-text">{{ section.settings.header_text }}</p>
+    {% if section.settings.button2_label != blank %}
+        <a href="{{ section.settings.button2_link }}" class="header-button">
+        {{ section.settings.button2_label }} &rarr;
+        </a>
+    {% endif %}
+    </div>
 
     <!-- BANNER IMAGE SECTION -->
     <div class="custom-banner" style="background-image: url({{ section.settings.banner_image | img_url: '1440x780' }});">
-        <div class="banner-content">
+    <div class="banner-content">
         <h1>{{ section.settings.banner_heading }}</h1>
         <p>{{ section.settings.banner_subheading }}</p>
         {% if section.settings.button_label != blank %}
-            <a href="{{ section.settings.button_link }}" class="banner-button">
+        <a href="{{ section.settings.button_link }}" class="banner-button">
             {{ section.settings.button_label }} &rarr;
-            </a>
+        </a>
         {% endif %}
-        </div>
+    </div>
     </div>
 
     <!-- FOOTER SECTION -->
     <div class="footer">
-        <h5>{{ section.settings.banner_footer }}</h5>
+    <h5>{{ section.settings.banner_footer }}</h5>
     </div>
     </section>
 
-    
-
     <style>
-    body{
-        overflow-x: hidden;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    body {
+    overflow-x: hidden;
+    font-family: 'Segoe UI'
+    , Tahoma
+    , Geneva
+    , Verdana
+    , sans-serif;
     }
 
-    .head{
-        background-color: #F5F5F5;
-        height: 64px;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 50px 10px 50px;
+    .head {
+    background-color: #f5f5f5;
+    height: 64px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 50px;
     }
-    .banner-logo{
-            font-size: 19px;
-            font-weight: bold;
-            vertical-align: middle;
-            padding-top: 22.5px;
-            padding-left: 50.78px;
+
+    .banner-logo {
+    font-size: 19px;
+    font-weight: bold;
+    vertical-align: middle;
+    padding-top: 22.5px;
+    padding-left: 50.78px;
     }
-    .header-text{
-        font-size: 16px;
-        font-weight: 400;
-        line-height: 13.42px;
-        letter-spacing: 0;
-        vertical-align: middle;
-        text-align: center;
+
+    .header-text {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 13.42px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    text-align: center;
     }
-    .header-button{
-        position: relative;
-        padding: 11.67px 41px;
-        width: 207px;
-        height: 44px;
-        font-size: 16px;
-        font-weight: 400;
-        line-height: 20.48px;
-        letter-spacing: 0;
-        vertical-align: middle;
-        text-align: center;
-        text-transform: uppercase;
-        background-color: #FFF544;
-        color: #000000;
-        overflow: hidden;
-        transition: color 0.3 ease;
-        z-index: 1;
+
+    .header-button {
+    position: relative;
+    padding: 11.67px 41px;
+    width: 207px;
+    height: 44px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20.48px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: #fff544;
+    color: #000000;
+    overflow: hidden;
+    transition: color 0.3 ease;
+    z-index: 1;
     }
-    .header-button::before{
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background-color: #000;
-        z-index: -1;
-        transition: left 0.3s ease;
+
+    .header-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    z-index: -1;
+    transition: left 0.3s ease;
     }
-    .header-button:hover::before{
-        left: 0;
+
+    .header-button:hover::before {
+    left: 0;
     }
-    .header-button:hover{
-        color: white;
+
+    .header-button:hover {
+    color: white;
     }
 
     .custom-banner {
@@ -177,20 +185,24 @@
     width: 100%;
     height: 780px;
     color: #000;
+    }
 
+    .banner-content {
+    font-family: 'Segoe UI'
+    , Tahoma
+    , Geneva
+    , Verdana
+    , sans-serif;
+    position: absolute;
+    left: 67px;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    top: -64px;
+    /* margin: 30px; */
     }
-    .banner-content{
-        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        position: absolute;
-        left: 67px;
-        color: #000000;
-        margin: 0;
-        padding: 0;
-        top: -64px;
-        /* margin: 30px; */
-    }
-    
-    .banner-content h1{
+
+    .banner-content h1 {
     position: absolute;
     top: 489px;
     width: 459px;
@@ -202,7 +214,7 @@
     vertical-align: middle;
     padding: 0;
     margin: 0;
-    } 
+    }
 
     .banner-content p {
     position: absolute;
@@ -217,18 +229,19 @@
     letter-spacing: 0;
     vertical-align: middle;
     }
-    .footer h5{
-        display: inline-block;
-        background-color: #F5F5F5;
-        height: 34px;
-        width: 100%;
-        font-size: 16px;
-        line-height: 13.42px;
-        letter-spacing: 0;
-        vertical-align: middle;
-        text-align: center;
-        gap: 375px;
-        padding: 10px 50px 10px 50px;
+
+    .footer h5 {
+    display: inline-block;
+    background-color: #f5f5f5;
+    height: 34px;
+    width: 100%;
+    font-size: 16px;
+    line-height: 13.42px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    text-align: center;
+    gap: 375px;
+    padding: 10px 50px;
     }
 
     .banner-button {
@@ -248,20 +261,22 @@
     text-transform: uppercase;
     z-index: 1;
     }
+
     .banner-button::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
     transition: left 0.3s ease;
-    background-color: #FFF544;
+    background-color: #fff544;
     z-index: -1;
-}
-.banner-button:hover::before{
+    }
+
+    .banner-button:hover::before {
     left: 0;
-}
+    }
 
     .banner-button:hover {
     color: #000;

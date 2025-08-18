@@ -1,0 +1,215 @@
+    {% schema %}
+    {
+        "name": "Custom Grid",
+        "settings": [
+        {
+            "type": "text",
+            "id": "grid_heading",
+            "label": "Grid Heading",
+            "default": "Tisso vison in the wild"
+        }
+        ],
+        "blocks": [
+        {
+            "type": "product",
+            "name": "Product",
+            "settings": [
+            {
+                "type": "product",
+                "id": "product",
+                "label": "Select Product"
+            }, {
+                "type": "range",
+                "id": "btn_top",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "%",
+                "label": "Marker Position (Top)",
+                "default": 0
+            }, {
+                "type": "range",
+                "id": "btn_left",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "%",
+                "label": "Marker Position (Left)",
+                "default": 0
+            }
+            ]
+        }
+        ],
+        "max_blocks": 6,
+        "presets": [
+        {
+            "name": "Custom Grid",
+            "category": "Custom",
+            "blocks": [
+            {
+                "type": "product"
+            },
+            {
+                "type": "product"
+            },
+            {
+                "type": "product"
+            },
+            {
+                "type": "product"
+            }, {
+                "type": "product"
+            }, {
+                "type": "product"
+            }
+            ]
+        }
+        ]
+    }
+
+    {% endschema %}
+
+    <section class="custom-grid-wrapper">
+    <!-- Heading -->
+    <div class="custom-grid-header">
+        <h2>{{ section.settings.grid_heading }}</h2>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="custom-grid">
+        {% for block in section.blocks %}
+        {% assign product = all_products[block.settings.product] %}
+        {% if product %}
+            <div class="grid-item">
+            <img
+                src="{{ product.featured_image | image_url: width: 400, height: 400, crop: 'center' }}"
+                alt="{{ product.title }}"
+                width="400"
+                height="400" />
+            {% if block.settings.btn_top != blank and block.settings.btn_top != 0 %}
+                <button
+                class="btn"
+                style=" top: {{ block.settings.btn_top }}%; left: {{ block.settings.btn_left }}%;"
+                data-popup="popup-{{ block.id }}">+</button>
+            {% endif %}
+            </div>
+        {% endif %}
+
+        <!-- Popup Modal -->
+        <div id="popup-{{ block.id }}" class="popup-overlay">
+            <div class="popup-content">
+            <span class="popup-close">&times;</span>
+
+            <h3>{{ product.title }}</h3>
+            <p>
+                {{ product.price | money }}</p>
+            <p>
+                {{ product.description | strip_html | truncate: 200 }}</p>
+            </div>
+        </div>
+
+
+        {% endfor %}
+    </div>
+    </section>
+
+    <style>
+    .custom-grid-wrapper {
+        width: 100%;
+        height: 981px;
+        padding: 30px;
+    }
+    .custom-grid-header {
+        height: 43px;
+        width: 372px;
+
+    }
+    .custom-grid-header h2 {
+        font-weight: 400;
+        font-size: 36px;
+        line-height: 120%;
+        letter-spacing: 0;
+        vertical-align: middle;
+    }
+
+
+    .custom-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding-top: 30px;
+    }
+    .grid-item {
+        position: relative;
+    }
+    .grid-item img {
+        position: relative;
+        width: 100%;
+        height: auto;
+        display: inline-block;
+        object-fit: cover;
+        border: 1.5px solid #000000;
+    }
+
+    .btn {
+        position: absolute;
+        color: #000000;
+        font-size: 10px;
+        text-decoration: none;
+        border-radius: 90%;
+        background-color: #F8F8F8E5;
+        height: 22px;
+        width: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .popup-overlay {
+        display: none;
+        position: fixed;
+        justify-content: center;
+        align-items: center;
+        width: 311px;
+        height: 477px;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 9999;
+    }
+    .popup-content {
+        background-color: aliceblue;
+        text-align: right;
+        position: relative;
+    }
+    .popup-close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    </style>
+
+<script>
+        document.addEventListener("DOMContentLoaded" ,function() {
+            document.querySelectorAll(".btn").forEach(function(btn){
+                btn.addEventListener("click", function() {
+                    var popupId = btn.getAttribute("data-popup");
+                    var popup = document.getElementById(popupId);
+                    if(popup) popup.style.display ="flex"
+                })
+            })
+        });
+            document.querySelectorAll(".popup-close").forEach(function(closeBtn) {
+        closeBtn.addEventListener("click", function() {
+        closeBtn.closest(".popup-overlay").style.display = "none";
+        });
+    });
+
+    document.querySelectorAll(".popup-overlay").forEach(function(overlay) {
+        overlay.addEventListener("click", function(e) {
+        if (e.target === overlay) overlay.style.display = "none";
+        });
+    });
+    });
+</script>
