@@ -86,12 +86,11 @@
                 alt="{{ product.title }}"
                 width="400"
                 height="400" />
-            {% if block.settings.btn_top != blank and block.settings.btn_top != 0 %}
-                <button
+            <button
                 class="btn"
-                style=" top: {{ block.settings.btn_top }}%; left: {{ block.settings.btn_left }}%;"
-                data-popup="popup-{{ block.id }}">+</button>
-            {% endif %}
+                style="top: {{ block.settings.btn_top }}%; left: {{ block.settings.btn_left }}%;"
+                data-popup="popup-{{ block.id }}">+
+            </button>
             </div>
         {% endif %}
 
@@ -100,11 +99,9 @@
             <div class="popup-content">
             <span class="popup-close">&times;</span>
 
-            <h3>{{ product.title }}</h3>
-            <p>
-                {{ product.price | money }}</p>
-            <p>
-                {{ product.description | strip_html | truncate: 200 }}</p>
+            <h3>hlello</h3>
+            <p>khfklds</p>
+            <p>enflem</p>
             </div>
         </div>
 
@@ -118,6 +115,7 @@
         width: 100%;
         height: 981px;
         padding: 30px;
+        z-index: -1;
     }
     .custom-grid-header {
         height: 43px;
@@ -169,17 +167,23 @@
     .popup-overlay {
         display: none;
         position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 500px;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 1;
         justify-content: center;
         align-items: center;
-        width: 311px;
-        height: 477px;
-        background-color: rgba(0, 0, 0, 0.6);
-        z-index: 9999;
     }
     .popup-content {
-        background-color: aliceblue;
-        text-align: right;
+        background: #fff;
+        padding: 20px;
+        width: 311px;
+        max-height: 477px;
+        overflow-y: auto;
         position: relative;
+        border-radius: 8px;
     }
     .popup-close {
         position: absolute;
@@ -190,26 +194,4 @@
     }
     </style>
 
-<script>
-        document.addEventListener("DOMContentLoaded" ,function() {
-            document.querySelectorAll(".btn").forEach(function(btn){
-                btn.addEventListener("click", function() {
-                    var popupId = btn.getAttribute("data-popup");
-                    var popup = document.getElementById(popupId);
-                    if(popup) popup.style.display ="flex"
-                })
-            })
-        });
-            document.querySelectorAll(".popup-close").forEach(function(closeBtn) {
-        closeBtn.addEventListener("click", function() {
-        closeBtn.closest(".popup-overlay").style.display = "none";
-        });
-    });
-
-    document.querySelectorAll(".popup-overlay").forEach(function(overlay) {
-        overlay.addEventListener("click", function(e) {
-        if (e.target === overlay) overlay.style.display = "none";
-        });
-    });
-    });
-</script>
+    <script defer src="{{ 'popup.js' | asset_url }}"></script>
