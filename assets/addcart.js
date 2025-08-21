@@ -1,85 +1,125 @@
 // @ts-nocheck
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("✅ addcart.js loaded");
 
-    document.querySelectorAll("[data-product-popup]").forEach((popup) => {
-        const productData = JSON.parse(popup.getAttribute("data-product-json"));
-        const blockId = popup.getAttribute("data-block-id");
+function initProductPopups(scope = document) {
+    scope.querySelectorAll("[data-product-popup]").forEach(popup => {
+        const blockId = popup.dataset.blockId;
 
-        const sizeSelect = popup.querySelector(`#product-size-${blockId}`);
-        const variantInput = popup.querySelector(`#variant-id-${blockId}`);
-        const form = popup.querySelector("form");
+        // Parse variants JSON
+        const variants = JSON.parse(
+        document.getElementById(`variants-json-${blockId}`).textContent
+        );
 
-        if (!form) return;
+        // Elements
+        const colorBtns = popup.querySelectorAll(".btns button[data-color]");
+        const sizeSelect = popup.querySelector(".size-select");
+        const form = popup.querySelector(".add-to-cart-form");
+        const variantInput = form.querySelector(".variant-id");
+        const addBtn = form.querySelector("button[type=submit]");
+        const debugColor = popup.querySelector(".selected-color");
+        const debugSize = popup.querySelector(".selected-size");
+        const debugVariant = popup.querySelector(".selected-variant");
 
-        // 🔹 Function to update hidden variant input
+        // Track selections
+        let selectedColor = null;
+        let selectedSize = null;
+
+        // Update debug info (optional)
+        function updateDebug() {
+        if (debugColor) debugColor.textContent = selectedColor || "-";
+        if (debugSize) debugSize.textContent = selectedSize || "-";
+        if (debugVariant) debugVariant.textContent = variantInput.value || "-";
+        }
+
+        // Try to find matching variant
         function updateVariant() {
-        const selectedSize = sizeSelect?.value;
-        const activeColorBtn = popup.querySelector(".btns button.active");
-        const selectedColor = activeColorBtn ? activeColorBtn.textContent.trim() : null;
-
         if (!selectedColor || !selectedSize) {
             variantInput.value = "";
+            addBtn.disabled = true;
+            updateDebug();
             return;
         }
 
-        const selectedOptions = [selectedColor, selectedSize];
+        let match = variants.find(v =>
+            v.options.includes(selectedColor) && v.options.includes(selectedSize)
+        );
 
-        const matchedVariant = productData.variants.find((v) => {
-            return JSON.stringify(v.options) === JSON.stringify(selectedOptions);
-        });
-
-        if (matchedVariant) {
-            variantInput.value = matchedVariant.id;
-            console.log("✅ Variant updated:", matchedVariant);
+        if (match) {
+            variantInput.value = match.id;
+            addBtn.disabled = false;
         } else {
             variantInput.value = "";
-            console.warn("⚠️ No variant found for:", selectedOptions);
-        }
+            addBtn.disabled = true;
         }
 
-        // 🔹 Handle color button clicks
-        popup.querySelectorAll(".btns button").forEach((btn) => {
+        updateDebug();
+        }
+
+        // Color button click
+        colorBtns.forEach(btn => {
         btn.addEventListener("click", () => {
-            popup.querySelectorAll(".btns button").forEach((b) =>
-            b.classList.remove("active")
-            );
+            selectedColor = btn.dataset.color;
+
+            // Highlight active color
+            colorBtns.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
+
             updateVariant();
         });
         });
 
-        // 🔹 Handle size change
-        sizeSelect?.addEventListener("change", updateVariant);
-
-        // 🔹 Handle Add to Cart
-        form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        if (!variantInput.value) {
-            alert("Please select both color and size before adding to cart.");
-            return;
-        }
-
-        const formData = new FormData(form);
-
-        try {
-            const res = await fetch("/cart/add.js", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams(formData).toString(),
-            });
-
-            if (!res.ok) throw new Error("Failed to add to cart");
-
-            const cartData = await res.json();
-            console.log("🛒 Added to cart:", cartData);
-
-            // Redirect to cart
-            window.location.href = "/cart";
-        } catch (err) {
-            console.error("❌ Error adding to cart:", err);
-        }
+        // Size change
+        if (sizeSelect) {
+        sizeSelect.addEventListener("change", () => {
+            selectedSize = sizeSelect.value || null;
+            updateVariant();
         });
+        }
+
+    // Add to cart form submit
+    form.addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const variantId = variantInput.value;
+    if (!variantId) return;
+
+    try {
+        const res = await fetch(window.Shopify.routes.root + "cart/add.js", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+        });
+
+        if (!res.ok) throw new Error("Failed to add to cart");
+        const data = await res.json();
+        console.log("Added to cart:", data);
+
+        // ✅ Show alert
+        alert("Your product has been added to the cart!");
+
+        // ✅ Redirect to cart page
+        window.location.href = "/cart";
+    } catch (err) {
+        console.error(err);
+        alert("Error adding to cart");
+    }
     });
+
+
+        // Initialize with defaults
+        if (sizeSelect && sizeSelect.value) selectedSize = sizeSelect.value;
+        const activeColorBtn = popup.querySelector(".btns button.active[data-color]");
+        if (activeColorBtn) selectedColor = activeColorBtn.dataset.color;
+
+        updateVariant();
+    });
+}
+
+// Run on first page load
+document.addEventListener("DOMContentLoaded", () => initProductPopups());
+
+// Run when Shopify dynamically reloads sections
+document.addEventListener("shopify:section:load", e => {
+  initProductPopups(e.target); // re-init only inside the loaded section
 });
+
+
