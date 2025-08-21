@@ -1,4 +1,4 @@
-    {% schema %}
+{% schema %}
     {
         "name": "Custom Grid",
         "settings": [
@@ -48,84 +48,122 @@
         }
         ]
     }
+{% endschema %}
 
-    {% endschema %}
-
-    <section class="custom-grid-wrapper">
     <!-- Grid Heading -->
-    <div class="custom-grid-header">
-        <h2>{{ section.settings.grid_heading }}</h2>
-    </div>
+    <section class="custom-grid-wrapper">
+        <div class="custom-grid-header">
+            <h2>{{ section.settings.grid_heading }}</h2>
+        </div>
 
-    <!-- Product Grid -->
-    <div class="custom-grid">
-        {% for block in section.blocks %}
-        {% assign product = all_products[block.settings.product] %}
-        {% if product %}
-            <div class="grid-item" {{ block.shopify_attributes }}>
-            <img
-                src="{{ product.featured_image | image_url: width: 400, height: 400, crop: 'center' }}"
-                alt="{{ product.title }}"
-                width="400"
-                height="400" />
-            <button
-                class="btn"
-                style="top: {{ block.settings.btn_top }}%; left: {{ block.settings.btn_left }}%;"
-                data-popup="popup-{{ block.id }}">+</button>
+        <div class="custom-grid">
+            <!-- Product Grid -->
+            {% for block in section.blocks %}
+            {% assign product = all_products[block.settings.product] %}
+            {% if product %}
+                <div class="grid-item" {{ block.shopify_attributes }}>
+                <img
+                    src="{{ product.featured_image | image_url: width: 400, height: 400, crop: 'center' }}"
+                    alt="{{ product.title }}"
+                    width="400"
+                    height="400">
+                <button
+                    class="btn"
+                    style="top: {{ block.settings.btn_top }}%; left: {{ block.settings.btn_left }}%;"
+                    data-popup="popup-{{ block.id }}">
+                    +
+                </button>
 
-
-            <!-- Popup Modal for Each block -->
-            <div id="popup-{{ block.id }}" class="custom-popup-overlay">
-                <div class="custom-popup-content">
-                <span class="custom-popup-close">&times;</span>
-                <!-- Products details popup -->
-                <div class="detail">
-                    <a href="{{ product.url }}">
-                    <img
-                        src="{{ product.featured_image | image_url: width: 120, height: 140, crop: 'center' }}"
-                        alt="{{ product.title }}"
-                        width="120"
-                        height="140" />
-                    </a>
-                    <div class="detail-info">
-                    <h3>{{ product.title }}</h3>
-                    <p class="price">{{ product.price | money }}</p>
-                    <p class="description">{{ product.description | strip_html | truncate: 100 }}</p>
-                    </div>
-
-                    {% assign color_option = product.options_with_values | where: "name", "Color" | first %}
-
-                    {% if color_option and color_option.values.size >= 2 %}
-                    <div class="color-btn">
-                        <h6>Color</h6>
-                        <div class="btns">
-                        <button type="button" class="btn1">{{ color_option.values[0] | capitalize }}</button>
-                        <button type="button" class="btn2">{{ color_option.values[1] | capitalize }}</button>
+                <div id="popup-{{ block.id }}" 
+        class="custom-popup-overlay"
+        data-product-popup
+        data-block-id="{{ block.id }}">
+        
+        <!-- ✅ embed variants JSON -->
+        <script type="application/json" id="variants-json-{{ block.id }}">
+          {{ product.variants | json }}
+        </script>
+                    <!-- Popup Modal for Each block -->
+                    <div class="custom-popup-content">
+                    <span class="custom-popup-close">&times;</span>
+                    <!-- Products details popup -->
+                    <div class="detail">
+                        <a href="{{ product.url }}">
+                        <img
+                            src="{{ product.featured_image | image_url: width: 120, height: 140, crop: 'center' }}"
+                            alt="{{ product.title }}"
+                            width="120"
+                            height="140">
+                        </a>
+                        <div class="detail-info">
+                        <h3>{{ product.title }}</h3>
+                        <p class="price">{{ product.price | money }}</p>
+                        <p class="description">{{ product.description | strip_html | truncate: 100 }}</p>
                         </div>
-                        <div class="col1" style="background-color: {{ color_option.values[0] | downcase }}"></div>
-                        <div class="col2" style="background-color: {{ color_option.values[1] | downcase }}"></div>
+
+                        {% assign color_option = product.options_with_values | where: 'name', 'Color' | first %}
+
+                        {% if color_option and color_option.values.size >= 2 %}
+                        <div class="color-btn">
+                            <h6>Color</h6>
+                            <div class="btns">
+                            <button type="button" class="btn1">{{ color_option.values[0] | capitalize }}</button>
+                            <button type="button" class="btn2">{{ color_option.values[1] | capitalize }}</button>
+                            </div>
+                            <div class="col1" style="background-color: {{ color_option.values[0] | downcase }}"></div>
+                            <div class="col2" style="background-color: {{ color_option.values[1] | downcase }}"></div>
+                        </div>
+                        {% endif %}
+
+                        <form method="post" action="{{ routes.cart_add_url }}">
+                                
+                                {% assign size_option = product.options_with_values | where: 'name', 'Size' | first %}
+                                {% if size_option %}
+                                    <div class="size-dropdown">
+                                    <label for="product-size-{{ block.id }}">Size</label>
+                                    <select id="product-size-{{ block.id }}" class="size-select">
+                                        {% for size in size_option.values %}
+                                        <option value="{{ size }}">{{ size }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    </div>
+                                {% endif %}
+
+                                <!-- Hidden variant input -->
+                                <input type="hidden"
+                                name="id" 
+                                id="variant-id-{{ block.id }}" 
+                                value="{{ product.variants.first.id }}">
+
+                                <button type="submit">ADD TO CART &rarr;</button>
+                                </form>
+
                     </div>
-                    {% endif %}
-
-
-                    <form method="post" action="{{ routes.cart_add_url }}">
-                    <input
-                        type="hidden"
-                        name="id"
-                        value="{{ product.variants.first.id }}">
-                    <button type="submit">ADD TO CART &rarr;</button>
-                    </form>
+                    </div>
                 </div>
                 </div>
-            </div>
-            </div>
-        {% endif %}
-        {% endfor %}
-    </div>
+            {% endif %}
+            {% endfor %}
+        </div>
     </section>
 
-    <style>
-    /* Grid CSS */
+<style>
+
+    
+  /* Grid CSS */
+
+    .size-dropdown{
+        position: absolute;
+        top: 262px;
+        left: 20px;
+        width: 271px;
+        height: 64px;
+    }
+    .size-dropdown select{
+        width: 200px;
+        height: 40px;
+    }
+
     .custom-grid-wrapper {
         width: 100%;
         padding: 30px;
@@ -135,7 +173,6 @@
     .custom-grid-header {
         height: 43px;
         width: 372px;
-
     }
 
     .custom-grid-header h2 {
@@ -145,7 +182,6 @@
         letter-spacing: 0;
         vertical-align: middle;
     }
-
 
     .custom-grid {
         display: grid;
@@ -175,7 +211,7 @@
         border: 0;
         text-decoration: none;
         border-radius: 90%;
-        background-color: #F8F8F8E5;
+        background-color: #f8f8f8e5;
         height: 18px;
         width: 18px;
         display: flex;
@@ -260,7 +296,6 @@
         line-height: 110%;
         color: #000;
         letter-spacing: -1%;
-
     }
 
     .color-btn {
@@ -293,6 +328,7 @@
         overflow: hidden;
         background: #fff;
     }
+
     .col1 {
         position: absolute;
         height: 40px;
@@ -301,6 +337,7 @@
         border: 0.5px solid black;
         z-index: 2;
     }
+
     .col2 {
         position: absolute;
         height: 40px;
@@ -312,7 +349,7 @@
     }
 
     .btns::before {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         bottom: 0;
@@ -351,11 +388,10 @@
     .btns button.active {
         color: #fff;
     }
+
     .btns.no-transition::before {
-    transition: none !important;
+        transition: none !important;
     }
-
-
 
     @keyframes popupFade {
         from {

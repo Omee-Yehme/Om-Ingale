@@ -1,42 +1,76 @@
+// @ts-nocheck
+console.log("Slider.js loaded");
 
-    // @ts-nocheck
-    document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.btns button');
-    if (!btn) return;
-    e.preventDefault();
+// Handle color button clicks
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".btns button");
+  if (!btn) return;
+  e.preventDefault();
 
-    const group = btn.closest('.btns');
-    const [btn1, btn2] = group.querySelectorAll('button');
+  const group = btn.closest(".btns");
+  const buttons = [...group.querySelectorAll("button")];
 
-    group.classList.add('active'); // make background visible
+  // highlight animation
+  group.classList.add("active");
+  buttons.forEach((b) => b.classList.remove("active"));
+  btn.classList.add("active");
+  group.classList.add("touched");
 
-    if (btn === btn2) {
-        // Right button clicked
-        if (!group.classList.contains('touched')) {
-        // First ever click is on right → jump instantly (no slide)
-        group.classList.add('no-transition');
-        group.classList.add('right-active');
+  // 🔹 Update hidden variant input
+  const popup = btn.closest("[data-product-popup]");
+  if (!popup) return;
 
-        requestAnimationFrame(() => {
-            group.classList.remove('no-transition');
-        });
-        } else {
-        // Normal smooth slide
-        group.classList.add('right-active');
-        }
+  const productData = JSON.parse(popup.getAttribute("data-product-json"));
+  const blockId = popup.getAttribute("data-block-id");
+  const variantInput = popup.querySelector(`#variant-id-${blockId}`);
+  const sizeSelect = popup.querySelector(`#product-size-${blockId}`);
 
-        btn2.classList.add('active');
-        btn1.classList.remove('active');
-    } else {
-        // Left button clicked
-        group.classList.remove('right-active');
-        btn1.classList.add('active');
-        btn2.classList.remove('active');
-    }
+  let selectedSize = sizeSelect ? sizeSelect.value : null;
+  let selectedColor = btn.innerText.trim();
 
-    // Mark group as interacted
-    group.classList.add('touched');
-    });
-        
+  const selectedOptions = [];
+  if (selectedColor) selectedOptions.push(selectedColor);
+  if (selectedSize) selectedOptions.push(selectedSize);
 
+  const matchedVariant = productData.variants.find(
+    (v) => JSON.stringify(v.options) === JSON.stringify(selectedOptions)
+  );
 
+  if (matchedVariant) {
+    variantInput.value = matchedVariant.id;
+    console.log("Variant updated from color click:", matchedVariant);
+  } else {
+    console.warn("No variant found for:", selectedOptions);
+  }
+});
+
+// Handle size dropdown changes
+document.addEventListener("change", (e) => {
+  if (!e.target.matches(".size-select")) return;
+
+  const popup = e.target.closest("[data-product-popup]");
+  if (!popup) return;
+
+  const productData = JSON.parse(popup.getAttribute("data-product-json"));
+  const blockId = popup.getAttribute("data-block-id");
+  const variantInput = popup.querySelector(`#variant-id-${blockId}`);
+
+  const size = e.target.value;
+  const colorBtn = popup.querySelector(".btns button.active");
+  const color = colorBtn ? colorBtn.innerText.trim() : null;
+
+  const selectedOptions = [];
+  if (color) selectedOptions.push(color);
+  if (size) selectedOptions.push(size);
+
+  const matchedVariant = productData.variants.find(
+    (v) => JSON.stringify(v.options) === JSON.stringify(selectedOptions)
+  );
+
+  if (matchedVariant) {
+    variantInput.value = matchedVariant.id;
+    console.log("Variant updated from size change:", matchedVariant);
+  } else {
+    console.warn("No variant found for:", selectedOptions);
+  }
+});
