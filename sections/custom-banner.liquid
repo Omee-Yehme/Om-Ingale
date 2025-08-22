@@ -1,284 +1,405 @@
-    {% schema %}
-    {
-    "name": "Custom banner",
-    "settings": [
-        {
-        "type": "text",
-        "id": "banner_logo",
-        "label": "Header Logo",
-        "default": "TISSO VISION"
-        },
-        {
-        "type": "text",
-        "id": "header_text",
-        "label": "Header Text",
-        "default": "Find the ideal gift for your loved ones."
-        },
-        {
-        "type": "text",
-        "id": "button_label",
-        "label": "Header Button Label",
-        "default": "Shop Now"
-        }, 
-        {
-        "type": "url",
-        "id": "button_link",
-        "label": "Header Button Link"
-        },  
-        {
-        "type": "image_picker",
-        "id": "banner_image",
-        "label": "Banner Image"
-        },
-        {
-        "type": "text",
-        "id": "banner_heading",
-        "label": "Heading",
-        "default": "The Gift Guide"
-        },
-        {
-        "type": "text",
-        "id": "banner_subheading",
-        "label": "Subheading",
-        "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season."
-        },
-        {
-        "type": "text",
-        "id": "button2_label",
-        "label": "Banner Button Label",
-        "default": "Choose Gift"
-        }, {
-        "type": "url",
-        "id": "button2_link",
-        "label": "Banner Button Link"
-        }, 
-        {
-        "type": "text",
-        "id": "banner_footer",
-        "label": "Banner Footer",
-        "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
-        }
-    ],
-    "presets": [
-        {
-        "name": "Custom Banner",
-        "category": "Custom"
-        }
-    ]
-    }
-    {% endschema %}
+{% schema %}
+{
+"name": "Custom banner",
+"settings": [
+{
+"type": "text",
+"id": "banner_logo",
+"label": "Header Logo",
+"default": "TISSO VISION"
+},
+{
+"type": "text",
+"id": "header_text",
+"label": "Header Text",
+"default": "Find the ideal gift for your loved ones."
+},
+{
+"type": "text",
+"id": "button_label",
+"label": "Header Button Label",
+"default": "Shop Now"
+},
+{
+"type": "url",
+"id": "button_link",
+"label": "Header Button Link"
+}, {
+"type": "image_picker",
+"id": "banner_image",
+"label": "Banner Image"
+}, {
+"type": "text",
+"id": "banner_heading",
+"label": "Heading",
+"default": "The Gift Guide"
+}, {
+"type": "text",
+"id": "banner_subheading",
+"label": "Subheading",
+"default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season."
+}, {
+"type": "text",
+"id": "button2_label",
+"label": "Banner Button Label",
+"default": "Choose Gift"
+}, {
+"type": "url",
+"id": "button2_link",
+"label": "Banner Button Link"
+}, {
+"type": "text",
+"id": "banner_footer",
+"label": "Banner Footer",
+"default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+}
+],
+"presets": [
+{
+"name": "Custom Banner",
+"category": "Custom"
+}
+]
+}
+{% endschema %}
 
-    <section class="custom-banner-wrapper">
+<section class="custom-banner-wrapper">
     <!-- HEADER BAR -->
-    <div class="head">
-    <h3 class="banner-logo">{{ section.settings.banner_logo | upcase }}</h3>
-    <p class="header-text">{{ section.settings.header_text }}</p>
-    {% if section.settings.button2_label != blank %}
-        <a href="{{ section.settings.button2_link }}" class="header-button">
-        {{ section.settings.button2_label }} &rarr;
-        </a>
-    {% endif %}
-    </div>
 
-    <!-- BANNER IMAGE SECTION -->
-    <div class="custom-banner" style="background-image: url({{ section.settings.banner_image | image_url: width:1440, height:780 }});">
-    <div class="banner-content">
-        <h1>{{ section.settings.banner_heading }}</h1>
-        <p>{{ section.settings.banner_subheading }}</p>
-        {% if section.settings.button_label != blank %}
-        <a href="{{ section.settings.button_link }}" class="banner-button">
-            {{ section.settings.button_label }} &rarr;
+    <div class="head">
+        <h3 class="banner-logo">{{ section.settings.banner_logo | upcase }}</h3>
+        <p class="header-text">{{ section.settings.header_text }}</p>
+        {% if section.settings.button2_label != blank %}
+        <a href="{{ section.settings.button2_link }}" class="header-button">
+            {{ section.settings.button2_label }} &rarr;
         </a>
         {% endif %}
     </div>
+    <div class="drop">&#x2261;</div>
+    <div class="cross">&#128938;</div>
+
+    <!-- BANNER IMAGE SECTION -->
+    <div class="custom-banner"
+        style="background-image: url({{ section.settings.banner_image | image_url: width:1440, height:780 }});">
+        <div class="banner-content">
+            <h1>{{ section.settings.banner_heading }}</h1>
+            <p>{{ section.settings.banner_subheading }}</p>
+            {% if section.settings.button_label != blank %}
+            <a href="{{ section.settings.button_link }}" class="banner-button">
+                {{ section.settings.button_label }} &rarr;
+            </a>
+            {% endif %}
+        </div>
     </div>
 
     <!-- FOOTER SECTION -->
     <div class="footer">
-    <h5>{{ section.settings.banner_footer }}</h5>
+        <h5>{{ section.settings.banner_footer }}</h5>
     </div>
-    </section>
+</section>
 
-    <style>
+<style>
     body {
-    overflow-x: hidden;
-    font-family: 'Segoe UI'
-    , Tahoma
-    , Geneva
-    , Verdana
-    , sans-serif;
+        overflow-x: hidden;
+        font-family: 'Segoe UI'
+            , Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .cross{
+        display: none;
+    }
+
+    .drop {
+        display: none;
     }
 
     .head {
-    background-color: #f5f5f5;
-    height: 64px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 50px;
+        background-color: #f5f5f5;
+        height: 64px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 50px;
     }
 
     .banner-logo {
-    font-size: 19px;
-    font-weight: bold;
-    vertical-align: middle;
-    padding-top: 22.5px;
-    padding-left: 50.78px;
+        font-size: 19px;
+        font-weight: bold;
+        vertical-align: middle;
+        padding-top: 22.5px;
+        padding-left: 50.78px;
     }
 
     .header-text {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 13.42px;
-    letter-spacing: 0;
-    vertical-align: middle;
-    text-align: center;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 13.42px;
+        letter-spacing: 0;
+        vertical-align: middle;
+        text-align: center;
     }
 
     .header-button {
-    position: relative;
-    padding: 11.67px 41px;
-    width: 207px;
-    height: 44px;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 20.48px;
-    letter-spacing: 0;
-    vertical-align: middle;
-    text-align: center;
-    text-transform: uppercase;
-    background-color: #fff544;
-    color: #000000;
-    overflow: hidden;
-    transition: color 0.3 ease;
-    z-index: 1;
+        position: relative;
+        padding: 11.67px 41px;
+        width: 207px;
+        height: 44px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 20.48px;
+        letter-spacing: 0;
+        vertical-align: middle;
+        text-align: center;
+        text-transform: uppercase;
+        background-color: #fff544;
+        color: #000000;
+        overflow: hidden;
+        transition: color 0.3 ease;
+        z-index: 1;
     }
 
     .header-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background-color: #000;
-    z-index: -1;
-    transition: left 0.3s ease;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        z-index: -1;
+        transition: left 0.3s ease;
     }
 
     .header-button:hover::before {
-    left: 0;
+        left: 0;
     }
 
     .header-button:hover {
-    color: white;
+        color: white;
     }
 
     .custom-banner {
-    position: relative;
-    text-align: left;
+        position: relative;
+        text-align: left;
 
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    width: 100%;
-    height: 780px;
-    color: #000;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        width: 100%;
+        height: 780px;
+        color: #000;
     }
 
     .banner-content {
-    font-family: 'Segoe UI'
-    , Tahoma
-    , Geneva
-    , Verdana
-    , sans-serif;
-    position: absolute;
-    left: 67px;
-    color: #000000;
-    margin: 0;
-    padding: 0;
-    top: -64px;
-    /* margin: 30px; */
+        font-family: 'Segoe UI'
+            , Tahoma, Geneva, Verdana, sans-serif;
+        position: absolute;
+        left: 67px;
+        color: #000000;
+        margin: 0;
+        padding: 0;
+        top: -64px;
+        /* margin: 30px; */
     }
 
     .banner-content h1 {
-    position: absolute;
-    top: 489px;
-    width: 459px;
-    height: 70px;
-    font-weight: 500;
-    font-size: 70px;
-    line-height: 100%;
-    letter-spacing: 0;
-    vertical-align: middle;
-    padding: 0;
-    margin: 0;
+        position: absolute;
+        top: 489px;
+        width: 100vw;
+        height: 70px;
+        font-weight: 500;
+        font-size: 70px;
+        line-height: 100%;
+        letter-spacing: 0;
+        vertical-align: middle;
+        padding: 0;
+        margin: 0;
     }
 
     .banner-content p {
-    position: absolute;
-    top: 609px;
-    padding-top: 0;
-    margin-top: 0;
-    height: 84px;
-    width: 483px;
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 140%;
-    letter-spacing: 0;
-    vertical-align: middle;
+        position: absolute;
+        top: 609px;
+        padding-top: 0;
+        margin-top: 0;
+        height: 84px;
+        width: 483px;
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 140%;
+        letter-spacing: 0;
+        vertical-align: middle;
     }
 
     .footer h5 {
-    display: inline-block;
-    background-color: #f5f5f5;
-    height: 34px;
-    width: 100%;
-    font-size: 16px;
-    line-height: 13.42px;
-    letter-spacing: 0;
-    vertical-align: middle;
-    text-align: center;
-    gap: 375px;
-    padding: 10px 50px;
+        display: inline-block;
+        background-color: #f5f5f5;
+        height: 34px;
+        width: 100%;
+        font-size: 16px;
+        line-height: 13.42px;
+        letter-spacing: 0;
+        vertical-align: middle;
+        text-align: center;
+        gap: 375px;
+        padding: 10px 50px;
     }
 
     .banner-button {
-    width: 220px;
-    height: 50px;
-    position: absolute;
-    top: 743px;
-    display: inline-block;
-    padding: 12px 24px;
-    background: #000;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 16px;
-    transition: color ease 0.3s;
-    text-align: center;
-    overflow: hidden;
-    text-transform: uppercase;
-    z-index: 1;
+        width: 220px;
+        height: 50px;
+        position: absolute;
+        top: 743px;
+        display: inline-block;
+        padding: 12px 24px;
+        background: #000;
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 16px;
+        transition: color ease 0.3s;
+        text-align: center;
+        overflow: hidden;
+        text-transform: uppercase;
+        z-index: 1;
     }
 
     .banner-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    transition: left 0.3s ease;
-    background-color: #fff544;
-    z-index: -1;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        transition: left 0.3s ease;
+        background-color: #fff544;
+        z-index: -1;
     }
 
     .banner-button:hover::before {
-    left: 0;
+        left: 0;
     }
 
     .banner-button:hover {
-    color: #000;
+        color: #000;
     }
-    </style>
+
+    /* Mobile CSS Setup */
+    @media (max-width: 768px) {
+        .head {
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            transition: height 0.6s ease-in-out;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .banner-logo {
+            padding: 20px 0 20px;
+            margin: 0;
+            width: 100%;
+            height: 64px;
+            box-shadow: 0 6px 6px -6px rgba(0, 0, 0, 0.3);
+
+        }
+        .header-text{
+            margin: 0;
+        }
+        .header-button{
+            width: 244;
+            margin: 10px;
+        }
+        .header-text,
+        .header-button {
+            opacity: 0;
+            transform: translateY(-10px); /* start hidden above */
+            transition: all 0.4s ease;
+            pointer-events: none; /* avoid clicks while hidden */
+        }
+        .custom-banner{
+                box-shadow: none !important;
+        }
+        .head.active ~ .custom-banner {
+    box-shadow: 0 -6px 6px -6px rgba(0, 0, 0, 0.2) !important;
+}
+
+        .drop {
+            display: block;
+            position: absolute;
+            top: 5px;
+            left: 25px;
+            width: 50px;
+            height: 10px;
+            font-size: 30px;
+            z-index: 2;
+            cursor: pointer;
+        }
+        .cross{
+            display: none;
+            position: absolute;
+            top: 5px;
+            left: 25px;
+            width: 50px;
+            height: 10px;
+            font-size: 30px;
+            z-index: 2;
+            cursor: pointer;
+        }
+        .head.active + .drop + .cross {
+            display: block !important;
+        } 
+        .head.active + .drop{
+            display: none !important;
+        }
+        
+
+        .head.active .header-text,
+        .head.active .header-button {
+            opacity: 1;
+            transform: translateY(0); /* slide down into view */
+            pointer-events: auto;
+        }
+        .head.active{
+            height: 200px;
+            
+        }
+    }
+</style>
+
+<script>
+function initBannerToggle(section) {
+  const drop = section.querySelector(".drop");
+  const cross = section.querySelector(".cross");
+  const head = section.querySelector(".head");
+
+  if (!drop || !head || !cross) return;
+
+  // Reset duplicate listeners
+  const newDrop = drop.cloneNode(true);
+  const newCross = cross.cloneNode(true);
+  drop.parentNode.replaceChild(newDrop, drop);
+  cross.parentNode.replaceChild(newCross, cross);
+
+  // Open on drop click
+  newDrop.addEventListener("click", () => {
+    head.classList.add("active");
+  });
+
+  // Close on cross click
+  newCross.addEventListener("click", () => {
+    head.classList.remove("active");
+  });
+}
+
+document.addEventListener("shopify:section:load", (event) => {
+  initBannerToggle(event.target);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const section = document.querySelector(".custom-banner-wrapper");
+  if (section) initBannerToggle(section);
+});
+</script>
+
