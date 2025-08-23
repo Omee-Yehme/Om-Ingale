@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "hero_jVaWmY": {
       "type": "hero",
@@ -57,10 +58,12 @@
         "text_YLPk4p",
         "button_H9gpTf"
       ],
+      "disabled": true,
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "image",
         "media_type_2": "image",
+        "link": "",
         "open_in_new_tab": false,
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -257,6 +260,7 @@
           ]
         }
       },
+      "disabled": true,
       "name": "Featured collection",
       "settings": {
         "collection": "all",
@@ -277,10 +281,93 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "custom_banner_Jr3FtE": {
+      "type": "custom-banner",
+      "name": "Custom Banner",
+      "settings": {
+        "banner_logo": "TISSO VISION",
+        "header_text": "Find the ideal gift for your loved ones.",
+        "button_label": "Shop Now",
+        "button_link": "",
+        "banner_image": "shopify://shop_images/rack-of-womens-clothing.jpg",
+        "banner_heading": "The Gift Guide",
+        "banner_subheading": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore Now!",
+        "button2_label": "Choose Gift",
+        "button2_link": "",
+        "banner_footer": "SUSTAINABLE, ETHICALLY MADE ACTIVEWEAR"
+      }
+    },
+    "custom_grid_4mhHDd": {
+      "type": "custom-grid",
+      "blocks": {
+        "product_f4KHtD": {
+          "type": "product",
+          "settings": {
+            "product": "black-leather-bag",
+            "btn_top": 60,
+            "btn_left": 51
+          }
+        },
+        "product_VpXgjn": {
+          "type": "product",
+          "settings": {
+            "product": "blue-silk-tuxedo",
+            "btn_top": 50,
+            "btn_left": 79
+          }
+        },
+        "product_ga78eB": {
+          "type": "product",
+          "settings": {
+            "product": "olive-green-jacket",
+            "btn_top": 49,
+            "btn_left": 63
+          }
+        },
+        "product_dy8RYf": {
+          "type": "product",
+          "settings": {
+            "product": "silk-summer-top",
+            "btn_top": 61,
+            "btn_left": 61
+          }
+        },
+        "product_wVP6qU": {
+          "type": "product",
+          "settings": {
+            "product": "dark-winter-jacket",
+            "btn_top": 59,
+            "btn_left": 59
+          }
+        },
+        "product_4iY4ce": {
+          "type": "product",
+          "settings": {
+            "product": "navy-sport-jacket",
+            "btn_top": 52,
+            "btn_left": 49
+          }
+        }
+      },
+      "block_order": [
+        "product_f4KHtD",
+        "product_VpXgjn",
+        "product_ga78eB",
+        "product_dy8RYf",
+        "product_wVP6qU",
+        "product_4iY4ce"
+      ],
+      "name": "Custom Grid",
+      "settings": {
+        "grid_heading": "Tisso vison in the wild"
+      }
     }
   },
   "order": [
     "hero_jVaWmY",
-    "product_list_fa6P9H"
+    "product_list_fa6P9H",
+    "custom_banner_Jr3FtE",
+    "custom_grid_4mhHDd"
   ]
 }
