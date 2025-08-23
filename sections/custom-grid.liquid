@@ -1,80 +1,92 @@
 {% schema %}
-{
-"name": "Custom Grid",
-"settings": [
-{
-"type": "text",
-"id": "grid_heading",
-"label": "Grid Heading",
-"default": "Tisso vison in the wild"
-}
-],
-"blocks": [
-{
-"type": "product",
-"name": "Product",
-"settings": [
-{
-"type": "product",
-"id": "product",
-"label": "Select Product"
-}, {
-"type": "range",
-"id": "btn_top",
-"min": 0,
-"max": 100,
-"step": 1,
-"unit": "%",
-"label": "Marker Position (Top)",
-"default": 0
-}, {
-"type": "range",
-"id": "btn_left",
-"min": 0,
-"max": 100,
-"step": 1,
-"unit": "%",
-"label": "Marker Position (Left)",
-"default": 0
-}
-]
-}
-],
-"max_blocks": 6,
-"presets": [
-{
-"name": "Custom Grid",
-"category": "Custom"
-}
-]
-}
+    {
+    "name": "Custom Grid",
+    "settings": [
+        {
+        "type": "text",
+        "id": "grid_heading",
+        "label": "Grid Heading",
+        "default": "Tisso vison in the wild"
+        }
+    ],
+    "blocks": [
+        {
+        "type": "product",
+        "name": "Product",
+        "settings": [
+            {
+            "type": "product",
+            "id": "product",
+            "label": "Select Product"
+            },
+            {
+            "type": "range",
+            "id": "btn_top",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "%",
+            "label": "Marker Position (Top)",
+            "default": 0
+            },
+            {
+            "type": "range",
+            "id": "btn_left",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "%",
+            "label": "Marker Position (Left)",
+            "default": 0
+            }
+        ]
+        }
+    ],
+    "max_blocks": 6,
+    "presets": [
+        {
+        "name": "Custom Grid",
+        "category": "Custom"
+        }
+    ]
+    }
 {% endschema %}
 <!-- Grid Heading -->
 <section class="custom-grid-wrapper">
     <div class="custom-grid-header">
         <h2>{{ section.settings.grid_heading }}</h2>
     </div>
-    <div class="custom-grid"> <!-- Product Grid -->
+    <div class="custom-grid">
+        <!-- Product Grid -->
         {% for block in section.blocks %}
-        {% assign product =
-        all_products[block.settings.product] %}
+        {% assign product = all_products[block.settings.product] %}
         {% if product %}
+        
         <div class="grid-item" {{ block.shopify_attributes }}>
             <img src="{{ product.featured_image | image_url: width: 400, height: 400, crop: 'center' }}"
                 alt="{{ product.title }}" width="400" height="400">
             <button class="btn" style="top: {{ block.settings.btn_top }}%; left: {{ block.settings.btn_left }}%;"
-                data-popup="popup-{{ block.id }}"> + </button>
+                data-popup="popup-{{ block.id }}">
+                &#43;
+            </button>
+            
             <div id="popup-{{ block.id }}" class="custom-popup-overlay" data-product-popup
-                data-block-id="{{ block.id }}"> <!-- ✅ embed variants JSON -->
-                <script type="application/json" id="variants-json-{{ block.id }}"> {{ product.variants | json }} 
-                        </script>
+                data-block-id="{{ block.id }}">
+                <!-- ✅ embed variants JSON -->
+                <script type="application/json" id="variants-json-{{ block.id }}">
+                {{ product.variants | json }}
+            </script>
+
                 <!-- Popup Modal for Each block -->
-                <div class="custom-popup-content"> <span class="custom-popup-close">&times;</span>
+                <div class="custom-popup-content">
+                    <span class="custom-popup-close">&#215;</span>
+
                     <!-- Products details popup -->
                     <div class="detail">
                         <a href="{{ product.url }}">
                             <img src="{{ product.featured_image | image_url: width: 120, height: 140, crop: 'center' }}"
-                                alt="{{ product.title }}" width="120" height="140"> </a>
+                                alt="{{ product.title }}" width="120" height="140">
+                        </a>
                         <div class="detail-info">
                             <h3>{{ product.title }}</h3>
                             <p class="price">{{ product.price | money }}</p>
@@ -82,47 +94,70 @@
                         </div>
 
                         <!-- Color buttons -->
-                        <div class="btns">
-                            {% for option in product.options_with_values %}
-                            {% if option.name == 'Color' %}
-                            {% for value in option.values %}
-                            <button type="button" data-color="{{ value }}">{{ value }}</button>
-                            {% endfor %}
-                            {% endif %}
-                            {% endfor %}
+                        <div class="col-btn">
+                            <h2 class="co">Color</h2>
+                            <div class="btns">
+                                {% assign colors = '' %}
+                                {% for option in product.options_with_values %}
+                                {% if option.name == 'Color' %}
+                                {% for value in option.values %}
+                                <button type="button" data-color="{{ value }}">{{ value }}</button>
+                                {% assign colors = colors | append: value | append: ',' %}
+                                {% endfor %}
+                                {% endif %}
+                                {% endfor %}
+
+                                {% assign color_list = colors | split: ',' %}
+                                {% if color_list.size > 1 %}
+                                <div class="col1" style="background-color: {{ color_list[0] | downcase }};"></div>
+                                <div class="col2" style="background-color: {{ color_list[1] | downcase }};"></div>
+                                {% endif %}
+                            </div>
                         </div>
 
                         <!-- Size dropdown -->
                         {% assign size_option = product.options_with_values | where: 'name', 'Size' | first %}
                         {% if size_option %}
                         <div class="size-dropdown">
-                            <label for="product-size-{{ block.id }}">Size</label>
-                            <select id="product-size-{{ block.id }}" class="size-select">
-                                <option value="">Select Size</option>
-                                {% for value in size_option.values %}
-                                <option value="{{ value }}">{{ value }}</option>
-                                {% endfor %}
-                            </select>
+                            <label style="margin-bottom:3px ;" for="product-size-{{ block.id }}">Size</label>
+                            <div class="custom-select-wrapper">
+                                <!-- Hidden select (Shopify still uses this for variant submission) -->
+                                <select id="product-size-{{ block.id }}" class="size-select-hidden" required>
+                                    <option disabled selected hidden>
+                                        Choose your size
+                                    </option>
+                                    {% for value in size_option.values %}
+                                    <option value="{{ value }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <!-- Custom dropdown UI -->
+                                <div class="custom-select" data-select-id="product-size-{{ block.id }}">
+                                    <div class="custom-select-trigger">
+                                        <span class="trigger-text">Choose your size</span>
+                                        <span class="select-arrow"></span>
+                                    </div>
+                                    <div class="custom-options">
+                                        {% for value in size_option.values %}
+                                        <div class="custom-option" data-value="{{ value }}">{{ value }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <div class="line"></div>
+                            </div>
                         </div>
                         {% endif %}
 
                         <!-- Add to cart form -->
                         <form method="post" action="{{ routes.cart_add_url }}" class="add-to-cart-form"
                             data-block-id="{{ block.id }}">
-                            <input type="hidden" name="id" class="variant-id" value="" />
-                            <input type="hidden" name="quantity" value="1" />
-                            <button type="submit" disabled>ADD TO CART →</button>
+                            <input type="hidden" name="id" class="variant-id" value="">
+                            <input type="hidden" name="quantity" value="1">
+                            <button class="addcar" type="submit" disabled>
+                                ADD TO CART →
+                            </button>
                         </form>
-
-                        <!-- Debug (optional) -->
-                        <div class="debug">
-                            <p>Color: <span class="selected-color">-</span></p>
-                            <p>Size: <span class="selected-size">-</span></p>
-                            <p>Variant: <span class="selected-variant">-</span></p>
-                        </div>
-
-
-
                     </div>
                 </div>
             </div>
@@ -133,19 +168,6 @@
 </section>
 <style>
     /* Grid CSS */
-
-    .size-dropdown {
-        position: absolute;
-        top: 262px;
-        left: 20px;
-        width: 271px;
-        height: 64px;
-    }
-
-    .size-dropdown select {
-        width: 200px;
-        height: 40px;
-    }
 
     .custom-grid-wrapper {
         width: 100%;
@@ -190,7 +212,7 @@
     .btn {
         position: absolute;
         color: #000000;
-        font-size: 14px;
+        font-size: 10px;
         border: 0;
         text-decoration: none;
         border-radius: 90%;
@@ -265,7 +287,7 @@
 
     .price {
         margin: 0;
-        font-weight: 400;
+        font-weight: 500;
         font-size: 16px;
         line-height: 120%;
         color: #000;
@@ -281,24 +303,32 @@
         letter-spacing: -1%;
     }
 
-
-    .btns {
+    /* Colour Buttons CSS*/
+    .col-btn {
         position: absolute;
         top: 186px;
         left: 20px;
+    }
+
+    .co {
+        font-size: 14px;
+        font-weight: 400;
+        color: #333333;
+    }
+
+    .btns {
+        position: relative;
         display: flex;
         width: 271px;
         height: 40px;
         border: 0.5px solid #000;
         overflow: hidden;
-        background: #fff;
     }
 
     .col1 {
         position: absolute;
         height: 40px;
         width: 5px;
-        top: 24px;
         border: 0.5px solid black;
         z-index: 2;
     }
@@ -306,7 +336,7 @@
     .col2 {
         position: absolute;
         height: 40px;
-        top: 24px;
+        top: -1px;
         border: 0.5px solid black;
         width: 5px;
         left: 135px;
@@ -321,7 +351,8 @@
         left: 0;
         width: 50%;
         background: #000;
-        transition: transform 0.3s ease, opacity 0.2s ease;
+        transition: transform 0.3s ease;
+        transform: translateX(0%);
         z-index: 0;
         opacity: 0;
     }
@@ -332,7 +363,6 @@
 
     .btns.right-active::before {
         transform: translateX(100%);
-        opacity: 1;
     }
 
     .btns button {
@@ -357,6 +387,125 @@
         transition: none !important;
     }
 
+    /* Dropdown CSS */
+    .size-select-hidden {
+        display: none;
+    }
+
+    .size-dropdown {
+        position: absolute;
+        top: 262px;
+        left: 20px;
+        width: 271px;
+        height: 64px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .custom-select-wrapper {
+        position: relative;
+
+        width: 100%;
+    }
+
+    .line {
+        position: absolute;
+        width: 1px;
+        background-color: #000;
+        height: 40px;
+        top: 0;
+        left: 216px;
+    }
+
+    .custom-select {
+        position: relative;
+        border: 0.5px solid black;
+        cursor: pointer;
+        height: 40px;
+        user-select: none;
+        background: #fff;
+    }
+
+    .custom-select-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 40px 0 10px;
+        font-size: 16px;
+        height: 40px;
+        position: relative;
+        height: 100%;
+    }
+
+    .custom-select-trigger .trigger-text {
+        flex: 1;
+        text-align: center;
+    }
+
+    .custom-options {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        max-height: 120px;
+        width: 100%;
+        border: 1px solid black;
+        background: #fff;
+        z-index: 5;
+        overflow-y: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .custom-options::-webkit-scrollbar {
+        display: none;
+    }
+
+    .custom-option {
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .custom-option:hover {
+        background-color: #000;
+        color: #fff;
+    }
+
+    .custom-select.open .custom-options {
+        display: block;
+    }
+
+    /* Custom arrow CSS */
+    .select-arrow {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        width: 12px;
+        height: 12px;
+        border-left: 2px solid #333;
+        border-bottom: 2px solid #333;
+        transform: translateY(-50%) rotate(-45deg);
+        pointer-events: none;
+        transition: transform 0.3s ease;
+    }
+
+    .select-arrow.active {
+        transform: translateY(-50%) rotate(135deg);
+    }
+
+    .addcar {
+        position: absolute;
+        width: 271px;
+        height: 45px;
+        top: 377px;
+        left: 20px;
+        background-color: #000000;
+        color: #fff;
+        cursor: pointer;
+    }
+
     @keyframes popupFade {
         from {
             opacity: 0;
@@ -367,5 +516,30 @@
             opacity: 1;
             transform: scale(0.8);
         }
+    }
+
+
+    @media (max-width: 768px) {
+
+    
+        .custom-grid-header{
+            width: 100%;
+            height: 29px;
+            text-align: center;
+        }
+        .custom-grid-header h2{
+            font-size: 24px;
+            
+        }
+        .custom-grid{
+            grid-template-columns: repeat(2,1fr);
+            gap: 4px;
+        }
+        .btn{
+        height: 15px;
+        width: 15px;
+        }
+
+
     }
 </style>
