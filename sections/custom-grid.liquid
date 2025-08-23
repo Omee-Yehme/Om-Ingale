@@ -61,13 +61,15 @@
         {% for block in section.blocks %}
         {% assign product = all_products[block.settings.product] %}
         {% if product %}
+        
         <div class="grid-item" {{ block.shopify_attributes }}>
             <img src="{{ product.featured_image | image_url: width: 400, height: 400, crop: 'center' }}"
                 alt="{{ product.title }}" width="400" height="400">
             <button class="btn" style="top: {{ block.settings.btn_top }}%; left: {{ block.settings.btn_left }}%;"
                 data-popup="popup-{{ block.id }}">
-                &#128931;
+                &#43;
             </button>
+            
             <div id="popup-{{ block.id }}" class="custom-popup-overlay" data-product-popup
                 data-block-id="{{ block.id }}">
                 <!-- ✅ embed variants JSON -->
@@ -77,7 +79,7 @@
 
                 <!-- Popup Modal for Each block -->
                 <div class="custom-popup-content">
-                    <span class="custom-popup-close">&#128938;</span>
+                    <span class="custom-popup-close">&#215;</span>
 
                     <!-- Products details popup -->
                     <div class="detail">
@@ -301,6 +303,7 @@
         letter-spacing: -1%;
     }
 
+    /* Colour Buttons CSS*/
     .col-btn {
         position: absolute;
         top: 186px;
